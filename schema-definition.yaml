@@ -1,0 +1,220 @@
+# Descripción de modelos, apps y APIs para el generador de backend
+apps:
+  - products:
+      - models:
+          - name: Product
+            verbose_name: "Product"
+            verbose_name_plural: "Products"
+            fields:
+              - name: name
+                type: CharField
+                options: "max_length=255"
+              - name: description
+                type: TextField
+                options: "null=True, blank=True"
+              - name: price
+                type: DecimalField
+                options: "max_digits=10, decimal_places=2"
+              - name: stock_quantity
+                type: IntegerField
+                options: "default=0"
+              - name: category
+                type: ForeignKey
+                options: "to='Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='products'"
+              - name: created_at
+                type: DateTimeField
+                options: "auto_now_add=True"
+              - name: updated_at
+                type: DateTimeField
+                options: "auto_now=True"
+            manager:
+              base_manager: "models.Manager"
+              methods:
+                - name: available_products
+                  query_fragment: ".filter(stock_quantity__gt=0)"
+                - name: products_in_category
+                  args: [category_id]
+                  query_fragment: ".filter(category__id=category_id)"
+            api:
+              include_actions: "__all__"
+              serializer:
+                fields: "all"
+                read_only_fields: [created_at, updated_at]
+              permissions:
+                - "rest_framework.permissions.IsAuthenticatedOrReadOnly"
+              authentication:
+                - "rest_framework_simplejwt.authentication.JWTAuthentication"
+              filterset:
+                fields: [price, stock_quantity, category]
+              search_fields: [name, description]
+              ordering_fields: [price, created_at, name]
+
+          - name: Category
+            verbose_name: "Category"
+            verbose_name_plural: "Categories"
+            fields:
+              - name: name
+                type: CharField
+                options: "max_length=100, unique=True"
+              - name: description
+                type: TextField
+                options: "null=True, blank=True"
+            manager:
+              base_manager: "models.Manager"
+              methods:
+                - name: active_categories
+                  query_fragment: ".all()"
+            api:
+              include_actions: [list, retrieve, create]
+              serializer:
+                fields: [id, name, description]
+                read_only_fields: []
+              permissions:
+                - "rest_framework.permissions.IsAdminUser"
+              authentication:
+                - "rest_framework_simplejwt.authentication.JWTAuthentication"
+              search_fields: [name]
+              ordering_fields: [name]
+
+          - name: ProductImage
+            verbose_name: "Product Image"
+            verbose_name_plural: "Product Images"
+            fields:
+              - name: product
+                type: ForeignKey
+                options: "to='Product', on_delete=models.CASCADE, related_name='images'"
+              - name: image
+                type: ImageField
+                options: "upload_to='product_images/'"
+              - name: description
+                type: CharField
+                options: "max_length=255, null=True, blank=True"
+            manager:
+              base_manager: "models.Manager"
+            api:
+              include_actions: "__all__"
+              serializer:
+                fields: "all"
+                read_only_fields: []
+              permissions:
+                - "rest_framework.permissions.IsAuthenticated"
+              authentication:
+                - "rest_framework_simplejwt.authentication.JWTAuthentication"
+              filterset:
+                fields: [product]
+
+  - customers:
+      - models:
+          - name: Customer
+            verbose_name: "Customer"
+            verbose_name_plural: "Customers"
+            fields:
+              - name: first_name
+                type: CharField
+                options: "max_length=100"
+              - name: last_name
+                type: CharField
+                options: "max_length=100"
+              - name: email
+                type: EmailField
+                options: "unique=True"
+              - name: phone_number
+                type: CharField
+                options: "max_length=20, null=True, blank=True"
+              - name: address
+                type: TextField
+                options: "null=True, blank=True"
+              - name: registration_date
+                type: DateField
+                options: "auto_now_add=True"
+            manager:
+              base_manager: "models.Manager"
+              methods:
+                - name: by_email
+                  args: [email_address]
+                  query_fragment: ".filter(email__iexact=email_address)"
+                - name: recent_customers
+                  query_fragment: ".filter(registration_date__gte=datetime.date.today() - datetime.timedelta(days=30))"
+                  requires_q: True
+            api:
+              include_actions: [list, retrieve, create, update, partial_update]
+              serializer:
+                fields: "all"
+                read_only_fields: [registration_date]
+              permissions:
+                - "rest_framework.permissions.IsAuthenticated"
+              authentication:
+                - "rest_framework_simplejwt.authentication.JWTAuthentication"
+              filterset:
+                fields: [email, registration_date]
+              search_fields: [first_name, last_name, email, phone_number]
+              ordering_fields: [last_name, first_name, email, registration_date]
+
+  - orders:
+      - models:
+          - name: Order
+            verbose_name: "Order"
+            verbose_name_plural: "Orders"
+            fields:
+              - name: customer
+                type: ForeignKey
+                options: "to='Customer', on_delete=models.CASCADE, related_name='orders'"
+              - name: order_date
+                type: DateTimeField
+                options: "auto_now_add=True"
+              - name: total_amount
+                type: DecimalField
+                options: "max_digits=10, decimal_places=2, default=0.00"
+              - name: status
+                type: CharField
+                options: "max_length=50, default='pending', choices=[('pending', 'Pending'), ('processing', 'Processing'), ('completed', 'Completed'), ('cancelled', 'Cancelled')]"
+            manager:
+              base_manager: "models.Manager"
+              methods:
+                - name: customer_orders
+                  args: [customer_id]
+                  query_fragment: ".filter(customer__id=customer_id)"
+                - name: completed_orders
+                  query_fragment: ".filter(status='completed')"
+            api:
+              include_actions: "__all__"
+              serializer:
+                fields: "all"
+                read_only_fields: [order_date, total_amount]
+              permissions:
+                - "rest_framework.permissions.IsAuthenticated"
+              authentication:
+                - "rest_framework_simplejwt.authentication.JWTAuthentication"
+              filterset:
+                fields: [customer, status, order_date]
+              ordering_fields: [order_date, total_amount]
+
+          - name: OrderItem
+            verbose_name: "Order Item"
+            verbose_name_plural: "Order Items"
+            fields:
+              - name: order
+                type: ForeignKey
+                options: "to='Order', on_delete=models.CASCADE, related_name='items'"
+              - name: product
+                type: ForeignKey
+                options: "to='Product', on_delete=models.CASCADE"
+              - name: quantity
+                type: IntegerField
+                options: "default=1"
+              - name: price_at_purchase
+                type: DecimalField
+                options: "max_digits=10, decimal_places=2"
+            manager:
+              base_manager: "models.Manager"
+            api:
+              include_actions: [list, retrieve, create]
+              serializer:
+                fields: "all"
+                read_only_fields: [price_at_purchase]
+              permissions:
+                - "rest_framework.permissions.IsAuthenticated"
+              authentication:
+                - "rest_framework_simplejwt.authentication.JWTAuthentication"
+              filterset:
+                fields: [order, product]
