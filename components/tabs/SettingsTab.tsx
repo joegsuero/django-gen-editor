@@ -1,11 +1,8 @@
 import React from "react";
-// Asumiendo que estos componentes provienen de shadcn/ui o una librería similar.
-// Asegúrate de que las rutas de importación sean correctas para tu proyecto.
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 
-// Interfaz para las props del componente SettingsTabContent
 interface SettingsTabContentProps {
   editorTheme: "vs-dark" | "light";
   setEditorTheme: (theme: "vs-dark" | "light") => void;
@@ -29,7 +26,6 @@ const SettingsTabContent = ({
 }: SettingsTabContentProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {/* Editor Theme */}
       <div>
         <Label htmlFor="editor-theme">Editor Theme</Label>
         <select
@@ -45,7 +41,6 @@ const SettingsTabContent = ({
         </select>
       </div>
 
-      {/* Font Size */}
       <div>
         <Label htmlFor="font-size">Font Size</Label>
         <Input
@@ -57,7 +52,6 @@ const SettingsTabContent = ({
         />
       </div>
 
-      {/* Word Wrap */}
       <div className="flex items-center space-x-2">
         <Label htmlFor="word-wrap">Word Wrap</Label>
         <Switch
@@ -67,7 +61,6 @@ const SettingsTabContent = ({
         />
       </div>
 
-      {/* Minimap */}
       <div className="flex items-center space-x-2">
         <Label htmlFor="minimap">Minimap</Label>
         <Switch id="minimap" checked={minimap} onCheckedChange={setMinimap} />

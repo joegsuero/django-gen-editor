@@ -1,16 +1,11 @@
 import React from "react";
-// Asumiendo que Separator proviene de shadcn/ui o una librería similar.
-// Asegúrate de que la ruta de importación sea correcta para tu proyecto.
 import { Separator } from "@/components/ui/separator";
 
-// Interfaz para las props del componente HelpTabContent
-// Este componente no requiere props por ahora, ya que su contenido es estático.
 interface HelpTabContentProps {}
 
 const HelpTabContent = ({}: HelpTabContentProps) => {
   return (
     <div style={{ height: "75vh" }} className="space-y-4">
-      {/* Sección: YAML Schema Structure */}
       <div>
         <h3 className="font-semibold">YAML Schema Structure</h3>
         <p>
@@ -39,7 +34,6 @@ const HelpTabContent = ({}: HelpTabContentProps) => {
 
       <Separator />
 
-      {/* Sección: Validation and Autocompletion */}
       <div>
         <h3 className="font-semibold">Validation and Autocompletion</h3>
         <p>
@@ -65,7 +59,6 @@ const HelpTabContent = ({}: HelpTabContentProps) => {
 
       <Separator />
 
-      {/* Sección: File Operations */}
       <div>
         <h3 className="font-semibold">File Operations</h3>
         <p>
@@ -86,7 +79,6 @@ const HelpTabContent = ({}: HelpTabContentProps) => {
 
       <Separator />
 
-      {/* Sección: Strict Validation */}
       <div>
         <h3 className="font-semibold">Strict Validation</h3>
         <p>

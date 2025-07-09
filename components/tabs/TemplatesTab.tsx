@@ -3,15 +3,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Copy, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { templates } from "@/constants/templates"; // Ensure this import is correct
+import { templates } from "@/constants/templates";
 
 interface TemplatesTabContentProps {
   setYamlContent: (yaml: string) => void;
 }
 
 const TemplatesTabContent = ({ setYamlContent }: TemplatesTabContentProps) => {
-  // Use a state to manage expanded status for each template
-  // Key will be the template index, value will be the current expansion level (0: default, 1: slightly more, etc.)
   const [expandedStates, setExpandedStates] = useState<Record<number, number>>(
     {}
   );
@@ -19,33 +17,31 @@ const TemplatesTabContent = ({ setYamlContent }: TemplatesTabContentProps) => {
   const toggleExpand = (index: number) => {
     setExpandedStates((prevStates) => {
       const currentLevel = prevStates[index] || 0;
-      // Define expansion levels (e.g., 0: 24 lines, 1: 48 lines, 2: full)
-      const nextLevel = (currentLevel + 1) % 3; // Cycle through 0, 1, 2
+      const nextLevel = (currentLevel + 1) % 3;
       return { ...prevStates, [index]: nextLevel };
     });
   };
 
   const collapseOnHoverLeave = (index: number) => {
-    setExpandedStates((prevStates) => ({ ...prevStates, [index]: 0 })); // Reset to default on hover leave
+    setExpandedStates((prevStates) => ({ ...prevStates, [index]: 0 }));
   };
 
   const getMaxHeight = (index: number) => {
     const level = expandedStates[index] || 0;
-    if (level === 0) return "max-h-48"; // Initial snippet (approx 4 lines)
-    if (level === 1) return "max-h-96"; // More lines (approx 8 lines)
-    return "max-h-full"; // Full content
+    if (level === 0) return "max-h-48";
+    if (level === 1) return "max-h-96";
+    return "max-h-full";
   };
 
   const getOverlayText = (index: number) => {
     const level = expandedStates[index] || 0;
-    if (level === 2) return ""; // No text when fully expanded
+    if (level === 2) return "";
     return level === 0 ? "Click to expand" : "Click to expand more";
   };
 
   return (
     <ScrollArea style={{ height: "75vh" }} className="border rounded-lg p-4">
       <div className="space-y-4">
-        {/* Section: Template Library */}
         <div>
           <h3 className="font-semibold mb-2 flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-purple-600 dark:text-purple-400" />
@@ -62,7 +58,6 @@ const TemplatesTabContent = ({ setYamlContent }: TemplatesTabContentProps) => {
 
         <Separator />
 
-        {/* Section: Available Templates */}
         <div>
           <h3 className="font-semibold mb-2">Choose a Template</h3>
           <div className="space-y-4">
@@ -70,7 +65,7 @@ const TemplatesTabContent = ({ setYamlContent }: TemplatesTabContentProps) => {
               <div
                 key={index}
                 className="p-4 border rounded-lg shadow-sm bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 transition-all duration-200 hover:shadow-md hover:border-blue-300 dark:hover:border-blue-700"
-                onMouseLeave={() => collapseOnHoverLeave(index)} // Collapse on mouse leave
+                onMouseLeave={() => collapseOnHoverLeave(index)}
               >
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="text-base font-medium text-gray-800 dark:text-gray-100 flex items-center gap-2">
@@ -94,12 +89,11 @@ const TemplatesTabContent = ({ setYamlContent }: TemplatesTabContentProps) => {
                   className={`bg-gray-100 dark:bg-gray-900 p-3 rounded-md text-xs font-mono overflow-hidden relative group cursor-pointer transition-all duration-300 ${getMaxHeight(
                     index
                   )}`}
-                  onClick={() => toggleExpand(index)} // Click to expand
+                  onClick={() => toggleExpand(index)}
                 >
                   <pre className="whitespace-pre-wrap break-words text-gray-700 dark:text-gray-300">
                     {template.yaml}
                   </pre>
-                  {/* Only show overlay if not fully expanded */}
                   {expandedStates[index] !== 2 && (
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-100 dark:from-gray-900 to-transparent flex items-end justify-center pb-2">
                       <span className="text-gray-500 dark:text-gray-500 text-xs">
@@ -115,7 +109,6 @@ const TemplatesTabContent = ({ setYamlContent }: TemplatesTabContentProps) => {
 
         <Separator />
 
-        {/* Section: How to Use */}
         <div>
           <h3 className="font-semibold mb-2">How to Use</h3>
           <div className="text-sm space-y-2">

@@ -1,18 +1,15 @@
 import React from "react";
-// Asumiendo que estos componentes provienen de shadcn/ui o una librería similar.
-// Asegúrate de que las rutas de importación sean correctas para tu proyecto.
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Alert, AlertDescription } from "@/components/ui/alert"; // Asumiendo que Alert y AlertDescription son de shadcn/ui
-import { Badge } from "@/components/ui/badge"; // Asumiendo que Badge es de shadcn/ui
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import {
   Info,
   CheckCircle,
   AlertCircle,
   Lightbulb,
   Shield,
-} from "lucide-react"; // Iconos de lucide-react
+} from "lucide-react";
 
-// Definición de la interfaz para un mensaje de validación
 interface ValidationMessage {
   severity: "error" | "warning" | "info";
   line: number;
@@ -22,14 +19,13 @@ interface ValidationMessage {
   suggestion?: string;
 }
 
-// Interfaz para las props del componente ValidationTabContent
 interface ValidationTabContentProps {
   strictValidation: boolean;
   validationErrors: ValidationMessage[];
   errorCount: number;
   warningCount: number;
   infoCount: number;
-  editorInstance: any | null; // El tipo real de Monaco Editor instance
+  editorInstance: any | null;
 }
 
 const ValidationTabContent = ({
@@ -42,7 +38,6 @@ const ValidationTabContent = ({
 }: ValidationTabContentProps) => {
   return (
     <div style={{ height: "75vh" }} className="space-y-4">
-      {/* Mensaje de resumen de validación */}
       {!strictValidation ? (
         <Alert>
           <Info className="h-4 w-4" />
@@ -68,7 +63,6 @@ const ValidationTabContent = ({
         </Alert>
       )}
 
-      {/* Área de desplazamiento para los detalles de validación */}
       <ScrollArea className="h-96 border rounded-lg p-4">
         {validationErrors.length > 0 ? (
           <div className="space-y-3">

@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Info } from "lucide-react"; // Asumiendo que 'Info' es un icono de lucide-react
+import { Info } from "lucide-react";
 import { builtInModels } from "../../constants/DjangoBuiltInModels";
 
 interface CustomModel {
@@ -58,14 +58,11 @@ const SchemaTabContent = ({
   yamlContent,
   parseAvailableModels = defaultParseAvailableModels,
 }: SchemaTabContentProps) => {
-  // Obtener los modelos personalizados parseando el contenido YAML
   const customModels = parseAvailableModels(yamlContent);
 
   return (
-    // El componente ScrollArea envuelve todo el contenido para permitir el desplazamiento
     <ScrollArea style={{ height: "75vh" }} className="border rounded-lg p-4">
       <div className="space-y-4">
-        {/* Sección: Enhanced ForeignKey Autocompletion */}
         <div>
           <h3 className="font-semibold mb-2">
             Enhanced ForeignKey Autocompletion
@@ -100,7 +97,6 @@ const SchemaTabContent = ({
 
         <Separator />
 
-        {/* Sección: Smart Duplicate Prevention */}
         <div>
           <h3 className="font-semibold mb-2">Smart Duplicate Prevention</h3>
           <div className="text-sm space-y-2">
@@ -129,13 +125,11 @@ const SchemaTabContent = ({
 
         <Separator />
 
-        {/* Sección: Available Models for ForeignKey Relationships */}
         <div>
           <h3 className="font-semibold mb-2">
             Available Models for ForeignKey Relationships
           </h3>
           <div className="space-y-4">
-            {/* Sub-sección: Custom Models */}
             <div>
               <h4 className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-2 flex items-center gap-1">
                 <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
@@ -175,7 +169,6 @@ const SchemaTabContent = ({
               </div>
             </div>
 
-            {/* Sub-sección: Built-in Models */}
             <div>
               <h4 className="text-sm font-medium text-green-600 dark:text-green-400 mb-2 flex items-center gap-1">
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
@@ -198,7 +191,6 @@ const SchemaTabContent = ({
               </div>
             </div>
 
-            {/* Sub-sección: Usage Examples */}
             <div>
               <h4 className="text-sm font-medium text-purple-600 dark:text-purple-400 mb-2 flex items-center gap-1">
                 <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
@@ -237,10 +229,6 @@ const SchemaTabContent = ({
 
         <Separator />
 
-        {/* Sección: Django Built-in Models (Repetido, pero con formato diferente en el original) */}
-        {/* Esta sección parece ser una repetición de la sub-sección anterior, pero con un formato más simple.
-            Si el original tiene una razón para esta duplicación, la mantendremos.
-            De lo contrario, podría considerarse una refactorización para evitar la redundancia. */}
         <div>
           <h3 className="font-semibold mb-2">Django Built-in Models</h3>
           <div className="space-y-2">
