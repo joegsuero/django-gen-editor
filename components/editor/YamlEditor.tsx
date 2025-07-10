@@ -1437,8 +1437,16 @@ export default function YAMLEditor() {
                 Django Gen YAML Descriptor
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-2">
-                YAML Editor for the Django Gen Package for generate your API
-                faster
+                YAML Editor for the
+                <a
+                  href="https://github.com/joegsuero/django-generator"
+                  target="blank"
+                  className="text-blue-600 hover:text-gray-400 transition-colors:duration-300"
+                >
+                  {" "}
+                  Django Gen Package{" "}
+                </a>
+                for generate your API faster
               </p>
             </div>
             <div className="flex items-center gap-2">
